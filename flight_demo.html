@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flight Search Demo</title>
+
+    <!-- Prevent Browser Caching -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            padding: 20px;
+        }
+        .container {
+            max-width: 450px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #ccc;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            font-weight: bold;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 6px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background: #0077ff;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #005fcc;
+        }
+        .result-box {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e8f4ff;
+            border-left: 4px solid #0077ff;
+            display: none;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+            display: none;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<script>
+// Check if user is blocked BEFORE showing the page 
+if (localStorage.getItem("blocked") === "true") {
+    // Redirect to a non-existent page to trigger browser error
+    window.location.href = "https://invalid.domain.abc/blocked";
+}
+
+var attempts = Number(localStorage.getItem("attempts")) || 0;
+
+function searchFlight() {
+    attempts++;
+    localStorage.setItem("attempts", attempts);
+
+    if (attempts > 5) {
+        localStorage.setItem("blocked", "true");
+
+        // Redirect to a non-existent page
+        window.location.href = "https://invalid.domain.abc/blocked";
+        return;
+    }
+
+    document.getElementById("errorMsg").style.display = "none";
+    document.getElementById("results").style.display = "block";
+}
+</script>
+
+<div class="container">
+    <h2>Flight Search</h2>
+
+    <div class="error" id="errorMsg">Too many searches! Please wait.</div>
+
+    <label>From</label>
+    <input type="text" id="from" placeholder="e.g., Melbourne">
+
+    <label>To</label>
+    <input type="text" id="to" placeholder="e.g., Sydney">
+
+    <label>Date</label>
+    <input type="date" id="date">
+
+    <label>Passengers</label>
+    <select id="passengers">
+        <option>1 Adult</option>
+        <option>2 Adults</option>
+        <option>3 Adults</option>
+    </select>
+
+    <button onclick="searchFlight()">Search Flights</button>
+
+    <div class="result-box" id="results">
+        <h3>Available Flights</h3>
+        <p><strong>Airline:</strong> Demo Airlines</p>
+        <p><strong>Price:</strong> $199</p>
+        <p><strong>Duration:</strong> 1h 25m</p>
+    </div>
+</div>
+
+<script>
+var attempts = Number(localStorage.getItem("attempts")) || 0;
+
+function searchFlight() {
+    attempts++;
+    localStorage.setItem("attempts", attempts);
+
+    if (attempts > 5) {
+        localStorage.setItem("blocked", "true");
+        location.reload(); // Reload to show the error page
+        return;
+    }
+
+    document.getElementById("errorMsg").style.display = "none";
+    document.getElementById("results").style.display = "block";
+}
+</script>
+
+</body>
+</html>
